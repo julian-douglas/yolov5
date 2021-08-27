@@ -1,3 +1,9 @@
+Hello!
+
+This is a Github repository forked from Glenn Jocher's that contains my modified code. 
+
+
+
 <div align="center">
 <p>
 <a align="left" href="https://ultralytics.com/yolov5" target="_blank">
