@@ -109,7 +109,7 @@ def train(hyp,  # path/to/hyp.yaml or hyp dictionary
     pretrained = weights.endswith('.pt')
     if pretrained:
         if opt.darknet:
-            opt.cfg = 'models/modified_yolov5.yaml'
+            opt.cfg = 'models/modified_yolov5s.yaml'
         with torch_distributed_zero_first(RANK):
             weights = attempt_download(weights)  # download if not found locally
         ckpt = torch.load(weights, map_location=device)  # load checkpoint
@@ -121,7 +121,7 @@ def train(hyp,  # path/to/hyp.yaml or hyp dictionary
         LOGGER.info(f'Transferred {len(csd)}/{len(model.state_dict())} items from {weights}')  # report
     else:
         if opt.darknet:
-            opt.cfg = 'models/modified_yolov5.yaml'
+            opt.cfg = 'models/modified_yolov5s.yaml'
         model = Model(cfg, ch=3, nc=nc, anchors=hyp.get('anchors')).to(device)  # create
 
     # Freeze
