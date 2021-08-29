@@ -105,8 +105,29 @@ def train(hyp,  # path/to/hyp.yaml or hyp dictionary
     # Model
     pretrained = weights.endswith('.pt')
     if pretrained:
-        if opt.darknet:
-            opt.cfg = 'models/modified_yolov5s.yaml'
+        if opt.medium:
+            if opt.darknet:
+                cfg = 'models/modified_yolov5m.yaml'
+            else:
+                cfg = 'models/yolov5m.yaml'
+
+        elif opt.large:
+            if opt.darknet:
+                cfg = 'models/modified_yolov5l.yaml'
+            else:
+                cfg = 'models/yolov5l.yaml'
+
+        elif opt.xlarge:
+            if opt.darknet:
+                cfg = 'models/modified_yolov5x.yaml'
+            else:
+                cfg = 'models/yolov5x.yaml'
+
+        else:
+            if opt.darknet:
+                cfg = 'models/modified_yolov5s.yaml'
+            else:
+                cfg = 'models/yolov5s.yaml'
         with torch_distributed_zero_first(RANK):
             weights = attempt_download(weights)  # download if not found locally
         ckpt = torch.load(weights, map_location=device)  # load checkpoint
@@ -117,8 +138,29 @@ def train(hyp,  # path/to/hyp.yaml or hyp dictionary
         model.load_state_dict(csd, strict=False)  # load
         LOGGER.info(f'Transferred {len(csd)}/{len(model.state_dict())} items from {weights}')  # report
     else:
-        if opt.darknet:
-            opt.cfg = 'models/modified_yolov5s.yaml'
+        if opt.medium:
+            if opt.darknet:
+                cfg = 'models/modified_yolov5m.yaml'
+            else:
+                cfg = 'models/yolov5m.yaml'
+
+        elif opt.large:
+            if opt.darknet:
+                cfg = 'models/modified_yolov5l.yaml'
+            else:
+                cfg = 'models/yolov5l.yaml'
+
+        elif opt.xlarge:
+            if opt.darknet:
+                cfg = 'models/modified_yolov5x.yaml'
+            else:
+                cfg = 'models/yolov5x.yaml'
+
+        else:
+            if opt.darknet:
+                cfg = 'models/modified_yolov5s.yaml'
+            else:
+                cfg = 'models/yolov5s.yaml'
         model = Model(cfg, ch=3, nc=nc, anchors=hyp.get('anchors')).to(device)  # create
 
     # Freeze
@@ -458,7 +500,12 @@ def parse_opt(known=False):
     parser.add_argument('--local_rank', type=int, default=-1, help='DDP parameter, do not modify')
     parser.add_argument('--freeze', type=int, default=0, help='Number of layers to freeze. backbone=10, all=24')
 
-    parser.add_argument('--darknet', action='store_true', default=False, help='Change backbone to CSPDarknet53')
+    #new arguments
+    parser.add_argument('--darknet', action = 'store_true', default=False, help='Change backbone to CSPDarknet53')
+    parser.add_argument('--medium', action='store_true', default=False, help='Change to YOLOv5m')
+    parser.add_argument('--large', action='store_true', default=False, help='Change to YOLOv5l')
+    parser.add_argument('--xlarge', action='store_true', default=False, help='Change to YOLOv5x')
+
     opt = parser.parse_known_args()[0] if known else parser.parse_args()
     return opt
 
