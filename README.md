@@ -1,4 +1,4 @@
-#Hello!
+Hello!
 
 This is a Github repository forked from Glenn Jocher's that contains my modified code. 
 
